@@ -59,7 +59,9 @@ function enqueue_custom_script()
 add_action('wp_enqueue_scripts', 'enqueue_custom_script');
 
 
-
+/**
+ * Shortcode para agrear en el single [mostrar_usuario]
+ */
 function mostrar_usuario_shortcode()
 {
 	global $post;
@@ -180,6 +182,7 @@ add_action('wp_ajax_nopriv_reservar_bloque_hora', 'reservar_bloque_hora');
 /**
  * Shorcode [mostrar_informacion_reserva_usuario]
  * para mostrar lista de reservas
+ * Agregar este shortcode en la página de agendamiento
  */
 function mostrar_informacion_reserva_usuario_shortcode()
 {
