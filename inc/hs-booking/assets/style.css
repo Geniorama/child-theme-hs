@@ -1,0 +1,185 @@
+.hs-heading{
+    background: black;
+    color: var( --e-global-color-text );
+    font-size: 35px;
+    letter-spacing: -1.75px;
+    padding: 10px 20px;
+}
+
+.hs-heading h5{
+    font-size: 35px;
+    margin: 0;
+}
+
+.hs-booking-table{
+    font-family: "Helvetica Neue Light", Sans-serif;
+}
+
+.hs-body__list{
+    list-style: none;
+    padding: 0px;
+}
+
+.hs-body__list__item{
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid black;
+}
+
+.hs-button-booking{
+    background: var( --e-global-color-primary );
+    border-radius: 0px;
+    border-color: var( --e-global-color-primary );
+    text-transform: uppercase;
+    color: black;
+    font-family: "Helvetica Neue Bold", Sans-serif;
+    letter-spacing: -0.6px;
+    font-size: 12px;
+    min-width: 200px;
+}
+
+.hs-button-booking:active, .hs-button-booking:focus{
+    background: var( --e-global-color-primary );
+    outline: none;
+    color: black;
+}
+
+.hs-button-booking:hover{
+    background: var( --e-global-color-primary );
+    color: black;
+    opacity: .6;
+}
+
+.hs-body__list__item__time{
+    font-size: 23px;
+    letter-spacing: -1.15px;
+    text-transform: uppercase;
+}
+
+.hs-button-booking.disabled{
+    color: white;
+    background: #b2b2b2;
+    pointer-events: none;
+    border-color: #b2b2b2;
+}
+
+.hs-booking-title{
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-flow: row wrap;
+    text-transform: uppercase;
+}
+
+.hs-booking-title h5{
+    font-size: 35px;
+    letter-spacing: -1.75px;
+}
+
+.hs-booking-title p{
+    font-size: 20px;
+    letter-spacing: -1px;
+}
+
+.hs-modal-booking{
+    background: rgba(0,0,0, .8);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100%;
+    z-index: 999;
+    display: grid;
+    place-items: center;
+    opacity: 0;
+    /* transition: all .3s; */
+}
+
+.hs-modal-booking__card{
+    font-family: "Helvetica Neue Light", Sans-serif;
+    width: 90%;
+    background-color: #f2f2f2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3em;
+    text-align: center;
+    max-width: 800px;
+}
+
+.hs-modal-booking__card hr{
+    width: 100%;
+    display: block;
+}
+
+.hs-card-heading{
+    margin: 20px 0px;
+    text-transform: uppercase;
+    font-size: 15px;
+    letter-spacing: -0.75px;
+}
+
+.hs-card-heading__name{
+    font-size: 130px;
+    font-family: "Qara Regular", Sans-serif;
+    line-height: .8em;
+    margin: 0px;
+    margin-top: 30px;
+}
+
+.hs-card-body{
+    margin-top: 20px;
+    font-size: 22px;
+    line-height: 1em;
+}
+
+.hs-info-booking{
+    font-size: 45px;
+    letter-spacing: -2.25px;
+    text-transform: uppercase;
+    line-height: 1em;
+}
+
+.hs-text-continue{
+    font-family: "Helvetica Neue Bold", Sans-serif;
+    font-size: 23px;
+}
+
+.hs-modal-action-buttons button{
+    font-size: 22px;
+}
+
+.hs-modal-action-buttons .hs-btn-cancel{
+    background: #b2b2b2;
+    color: white;
+    border-color: #b2b2b2;
+}
+
+@media screen and (max-width: 600px){
+    .hs-body__list__item{
+        flex-direction: column;
+    }
+
+    .hs-card-heading__name{
+        font-size: 55px;
+        letter-spacing: -4.68px;
+        margin-top: 15px;
+    }
+
+    .hs-card-heading{
+        font-size: 10px;
+        letter-spacing: -0.5px;
+    }
+
+    .hs-card-heading p{
+        margin: 0px;
+    }
+
+    .hs-info-booking{
+        font-size: 17px;
+        letter-spacing: -0.85px;
+    }
+    
+}
