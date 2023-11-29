@@ -120,11 +120,14 @@ function reservar_bloque_hora()
 			// Obtener el valor actualizado de reservaciones_realizadas_empresarios
 			$reservaciones_realizadas_empresarios_actualizado = get_user_meta(get_current_user_id(), 'reservaciones_realizadas_empresarios', true);
 
+			//NUEVO CAMPO
+			$reservaciones_realizadas_actualizado = get_user_meta(get_current_user_id(), 'reservaciones_realizadas', true);
+
 			// Deserializar para obtener el array
-			$reservaciones_realizadas_empresarios_actualizado = unserialize($reservaciones_realizadas_empresarios_actualizado);
+			$reservaciones_realizadas_actualizado = unserialize($reservaciones_realizadas_actualizado);
 
 			// Aquí se comprueba que el usuario no haya realizado una reserva anteriormente con el mismo empresario
-			if (!$reservaciones_realizadas_empresarios_actualizado || !in_array($usuario_id, $reservaciones_realizadas_empresarios_actualizado)) {
+			if (!$reservaciones_realizadas_actualizado || !in_array($usuario_id, $reservaciones_realizadas_actualizado)) {
 				// Actualizar el campo 'agendar' a true para el bloque de hora especificado
 				$horarios_rueda_de_negocios[$bloque_hora_id]['agendar'] = true;
 
@@ -154,14 +157,20 @@ function reservar_bloque_hora()
 				// Actualizar el campo bloques_horas_reservados con los nuevos valores serializados
 				update_user_meta(get_current_user_id(), 'bloques_horas_reservados', $bloques_horas_reservados_serializados);
 
-				// Actualizar el campo reservaciones_realizadas_empresarios con los nuevos valores
-				$reservaciones_realizadas_empresarios_actualizado[] = $usuario_id;
+				// Nuevo objeto con el id del empresario y el bloque de horas reservado
+				$nueva_reservacion = array(
+					'empresario_id' => $usuario_id,
+					'bloque_horas' => $bloque_hora_reservado,
+				);
+
+				// Agregar el nuevo objeto al array
+				$reservaciones_realizadas_actualizado[] = $nueva_reservacion;
 
 				// Serializar antes de actualizar el campo
-				$reservaciones_serializadas = serialize($reservaciones_realizadas_empresarios_actualizado);
+				$reservaciones_serializadas = serialize($reservaciones_realizadas_actualizado);
 
-				// Actualizar el campo reservaciones_realizadas_empresarios con los nuevos valores serializados
-				update_user_meta(get_current_user_id(), 'reservaciones_realizadas_empresarios', $reservaciones_serializadas);
+				// Actualizar el campo reservaciones_realizadas con los nuevos valores serializados
+				update_user_meta(get_current_user_id(), 'reservaciones_realizadas', $reservaciones_serializadas);
 			}
 
 			echo 'Éxito'; // Puedes enviar cualquier respuesta que desees de vuelta al frontend
@@ -186,32 +195,28 @@ add_action('wp_ajax_nopriv_reservar_bloque_hora', 'reservar_bloque_hora');
  */
 function mostrar_informacion_reserva_usuario_shortcode()
 {
-	// Obtener el valor serializado de la base de datos
-	$reservaciones_serializadas = get_user_meta(get_current_user_id(), 'reservaciones_realizadas_empresarios', true);
-	$bloque_horas_reservadas_serializadas = get_user_meta(get_current_user_id(), 'bloques_horas_reservados', true);
+	$reservadas_serializadas = get_user_meta(get_current_user_id(), 'reservaciones_realizadas', true);
 
-	// Deserializar para obtener el array
-	$reservaciones_deserializadas = unserialize($reservaciones_serializadas);
-
-	$bloque_horas_reservadas_deserializadas = unserialize($bloque_horas_reservadas_serializadas);
+	$reservadas_deserializadas = unserialize($reservadas_serializadas);
 
 	// Verificar si hay reservaciones
-	if ($reservaciones_deserializadas && is_array($reservaciones_deserializadas)) {
-		$html = '';
-		$html .= '<table>';
-		$html .= '<tr><th>ID Empresario</th><th>Nombre Empresario</th><th>Rango de Horas Reservadas</th></tr>';
+	if ($reservadas_deserializadas && is_array($reservadas_deserializadas)) {
+		$html = '<table>';
+		$html .= '<tr><th>Nombre Empresario</th><th>Rango de Horas Reservadas</th></tr>';
 
-		foreach ($reservaciones_deserializadas as $indice => $empresario_id) {
+		foreach ($reservadas_deserializadas as $reservacion) {
+			$empresario_id = $reservacion['empresario_id'];
+			$bloque_horas = $reservacion['bloque_horas'];
+
 			$empresario = get_post($empresario_id);
 			$nombre_empresario = ($empresario) ? get_the_title($empresario) : 'Empresario no encontrado';
 
 			$rango_horas_reservadas = '';
-			if (isset($bloque_horas_reservadas_deserializadas[$indice]) && is_array($bloque_horas_reservadas_deserializadas[$indice])) {
-				$rango_horas_reservadas = $bloque_horas_reservadas_deserializadas[$indice]['hora_inicio'] . ' - ' . $bloque_horas_reservadas_deserializadas[$indice]['hora_fin'];
+			if (is_array($bloque_horas) && isset($bloque_horas['hora_inicio'], $bloque_horas['hora_fin'])) {
+				$rango_horas_reservadas = $bloque_horas['hora_inicio'] . ' - ' . $bloque_horas['hora_fin'];
 			}
 
 			$html .= '<tr>';
-			$html .= '<td>' . esc_html($empresario_id) . '</td>';
 			$html .= '<td>' . esc_html($nombre_empresario) . '</td>';
 			$html .= '<td>' . esc_html($rango_horas_reservadas) . '</td>';
 			$html .= '</tr>';
