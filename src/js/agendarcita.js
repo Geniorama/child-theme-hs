@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
           if (xhr.responseText === "Éxito") {
             // Recargar la página después de una reserva exitosa
             location.reload();
+            console.log("registro exitoso");
           } else {
             // Puedes agregar lógica adicional aquí para manejar otros casos de respuesta
             console.log("Error al reservar el bloque de hora");

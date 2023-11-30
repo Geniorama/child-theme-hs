@@ -127,16 +127,13 @@ if (!function_exists('hs_booking_func')) {
             // Verificar que el bloque de hora existe
             if (isset($horarios_rueda_de_negocios[$bloque_hora_id])) {
                 // Obtener el valor actualizado de reservaciones_realizadas_empresarios
-                $reservaciones_realizadas_empresarios_actualizado = get_user_meta(get_current_user_id(), 'reservaciones_realizadas_empresarios', true);
-
-                //NUEVO CAMPO
                 $reservaciones_realizadas_actualizado = get_user_meta(get_current_user_id(), 'reservaciones_realizadas', true);
 
                 // Deserializar para obtener el array
                 $reservaciones_realizadas_actualizado = unserialize($reservaciones_realizadas_actualizado);
 
-                // Aquí se comprueba que el usuario no haya realizado una reserva anteriormente con el mismo empresario
-                if (!$reservaciones_realizadas_actualizado || !in_array($usuario_id, $reservaciones_realizadas_actualizado)) {
+                // Verificar si el usuario ya tiene una reserva con el mismo empresario
+                if (!$reservaciones_realizadas_actualizado || !in_array($usuario_id, array_column($reservaciones_realizadas_actualizado, 'empresario_id'))) {
                     // Actualizar el campo 'agendar' a true para el bloque de hora especificado
                     $horarios_rueda_de_negocios[$bloque_hora_id]['agendar'] = true;
 
@@ -145,26 +142,6 @@ if (!function_exists('hs_booking_func')) {
 
                     // Guardar el bloque de hora reservado en el perfil del usuario
                     $bloque_hora_reservado = $horarios_rueda_de_negocios[$bloque_hora_id];
-
-                    // Obtener el valor actualizado de bloques_horas_reservados
-                    $bloques_horas_reservados_actualizado = get_user_meta(get_current_user_id(), 'bloques_horas_reservados', true);
-
-                    // Deserializar para obtener el array
-                    $bloques_horas_reservados_actualizado = unserialize($bloques_horas_reservados_actualizado);
-
-                    // Agregar el nuevo valor si no existe
-                    if (!$bloques_horas_reservados_actualizado) {
-                        $bloques_horas_reservados_actualizado = array();
-                    }
-
-                    // Agregar el nuevo bloque de hora reservado al array
-                    $bloques_horas_reservados_actualizado[] = $bloque_hora_reservado;
-
-                    // Serializar antes de actualizar el campo
-                    $bloques_horas_reservados_serializados = serialize($bloques_horas_reservados_actualizado);
-
-                    // Actualizar el campo bloques_horas_reservados con los nuevos valores serializados
-                    update_user_meta(get_current_user_id(), 'bloques_horas_reservados', $bloques_horas_reservados_serializados);
 
                     // Nuevo objeto con el id del empresario y el bloque de horas reservado
                     $nueva_reservacion = array(
@@ -180,9 +157,11 @@ if (!function_exists('hs_booking_func')) {
 
                     // Actualizar el campo reservaciones_realizadas con los nuevos valores serializados
                     update_user_meta(get_current_user_id(), 'reservaciones_realizadas', $reservaciones_serializadas);
-                }
 
-                echo 'Éxito'; // Puedes enviar cualquier respuesta que desees de vuelta al frontend
+                    echo 'Éxito'; // Puedes enviar cualquier respuesta que desees de vuelta al frontend
+                } else {
+                    echo 'Error: Ya tienes una reserva con este empresario';
+                }
             } else {
                 echo 'Error: Bloque de hora no encontrado';
             }
