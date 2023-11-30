@@ -26,7 +26,6 @@ if(!function_exists('hs_calendly_booking_func')){
 	    $reservadas_deserializadas = unserialize($reservadas_serializadas);
 
         ob_start();
-        if($reservadas_deserializadas && is_array($reservadas_deserializadas)):
         ?>
         <div class="hs-booking-table">
             <div class="hs-booking-title">
@@ -36,6 +35,8 @@ if(!function_exists('hs_calendly_booking_func')){
                 <h5>5 DE DICIEMBRE DE 2023</h5>
             </div>
             <div class="hs-body">
+                <?php if($reservadas_deserializadas && is_array($reservadas_deserializadas) && count($reservadas_deserializadas) > 0): 
+                ?>
                 <ul class="hs-body__list">
                     <!-- Aquí va el loop de horas -->
                     <?php foreach($reservadas_deserializadas as $reservacion): 
@@ -61,10 +62,16 @@ if(!function_exists('hs_calendly_booking_func')){
                     </li>
                     <?php endforeach; ?>
                 </ul>
+                
+                <?php else: ?>
+                    <p class="hs-booking-not-found">
+                        No tienes hand-shakes en este día.
+                        Programa uno y no te quedes por fuera. ;)
+                    </p>
+                <?php endif; ?>
             </div>
         </div>
         <?php
-        endif;
         return ob_get_clean();
     }   
 }

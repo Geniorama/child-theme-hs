@@ -163,6 +163,13 @@
     border-color: #b2b2b2;
 }
 
+.hs-booking-not-found{
+    font-size: 23px;
+    letter-spacing: -1.15px;
+    text-transform: uppercase;
+    margin-top: 20px;
+}
+
 @media screen and (max-width: 600px){
     .hs-body__list__item{
         flex-direction: column;

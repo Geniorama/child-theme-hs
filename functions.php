@@ -44,8 +44,15 @@ require "inc/helpers/sc_show_photo.php";
 /**
  * SHORTCODE PARA MOSTRAR AGENDA PARA RESERVAR
  * [hs_booking]
+ * Página single empresarios
  */
 
+
+ /**
+ * SHORTCODE PARA MOSTRAR CALENDARIO
+ * [hs_calendly_booking]
+ * Página Mis Handshakes
+ */
 
 function enqueue_slick_assets()
 {
@@ -58,48 +65,3 @@ function enqueue_slick_assets()
 }
 add_action('wp_enqueue_scripts', 'enqueue_slick_assets');
 
-
-
-/**
- * Shorcode [mostrar_informacion_reserva_usuario]
- * para mostrar lista de reservas
- * Agregar este shortcode en la página de agendamiento
- */
-function mostrar_informacion_reserva_usuario_shortcode()
-{
-	$reservadas_serializadas = get_user_meta(get_current_user_id(), 'reservaciones_realizadas', true);
-
-	$reservadas_deserializadas = unserialize($reservadas_serializadas);
-
-	// Verificar si hay reservaciones
-	if ($reservadas_deserializadas && is_array($reservadas_deserializadas)) {
-		$html = '<table>';
-		$html .= '<tr><th>Nombre Empresario</th><th>Rango de Horas Reservadas</th></tr>';
-
-		foreach ($reservadas_deserializadas as $reservacion) {
-			$empresario_id = $reservacion['empresario_id'];
-			$bloque_horas = $reservacion['bloque_horas'];
-
-			$empresario = get_post($empresario_id);
-			$nombre_empresario = ($empresario) ? get_the_title($empresario) : 'Empresario no encontrado';
-
-			$rango_horas_reservadas = '';
-			if (is_array($bloque_horas) && isset($bloque_horas['hora_inicio'], $bloque_horas['hora_fin'])) {
-				$rango_horas_reservadas = $bloque_horas['hora_inicio'] . ' - ' . $bloque_horas['hora_fin'];
-			}
-
-			$html .= '<tr>';
-			$html .= '<td>' . esc_html($nombre_empresario) . '</td>';
-			$html .= '<td>' . esc_html($rango_horas_reservadas) . '</td>';
-			$html .= '</tr>';
-		}
-
-		$html .= '</table>';
-	} else {
-		$html = 'No hay reservaciones realizadas.';
-	}
-
-	return $html;
-}
-
-add_shortcode('mostrar_informacion_reserva_usuario', 'mostrar_informacion_reserva_usuario_shortcode');
