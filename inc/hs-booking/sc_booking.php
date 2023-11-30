@@ -25,7 +25,7 @@ if (!function_exists('hs_booking_func')) {
         wp_enqueue_script('agendarcita-script', get_stylesheet_directory_uri() . '/inc/hs-booking/assets/agendarcita.js', array('jquery'), null, true);
 
         // Pasar la URL de admin-ajax.php al script
-        wp_localize_script('agendarcita-script', 'agendarcita', array('ajaxurl' => admin_url('admin-ajax.php')));
+        wp_localize_script('booking-js', 'agendarcita', array('ajaxurl' => admin_url('admin-ajax.php')));
 
 
         global $post;
