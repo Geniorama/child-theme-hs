@@ -122,9 +122,13 @@ if (!function_exists('hs_booking_func')) {
         if (isset($_POST['bloque_hora_id'], $_POST['id_usuario'])) {
             $bloque_hora_id = sanitize_text_field($_POST['bloque_hora_id']);
             $usuario_id = sanitize_text_field($_POST['id_usuario']);
+            $current_user = wp_get_current_user();
 
             // Obtener los horarios de la rueda de negocios
             $horarios_rueda_de_negocios = get_field('horarios_rueda_de_negocios', $usuario_id);
+            // Obetener todas las reservas de un empresario
+            $reservas_del_empresario = get_field('usuarios_agendados', $usuario_id);
+            $cantidad_de_reservas = count($reservas_del_empresario);
 
             // Verificar que el bloque de hora existe
             if (isset($horarios_rueda_de_negocios[$bloque_hora_id])) {
@@ -142,11 +146,20 @@ if (!function_exists('hs_booking_func')) {
                         // Actualizar el campo 'agendar' a true para el bloque de hora especificado
                         $horarios_rueda_de_negocios[$bloque_hora_id]['agendar'] = true;
 
-                        // Guardar los cambios en la base de datos
-                        update_field('horarios_rueda_de_negocios', $horarios_rueda_de_negocios, $usuario_id);
-
                         // Guardar el bloque de hora reservado en el perfil del usuario
                         $bloque_hora_reservado = $horarios_rueda_de_negocios[$bloque_hora_id];
+
+                        //Actualizar Datos del usuario en el dashboard del empresario
+                        $reservas_del_empresario[$cantidad_de_reservas]['id_usuario'] = get_current_user_id();
+                        $reservas_del_empresario[$cantidad_de_reservas]['nombre_usuario'] = $current_user->display_name;
+                        $reservas_del_empresario[$cantidad_de_reservas]['correo_usuario'] = $current_user->user_email;
+                        $reservas_del_empresario[$cantidad_de_reservas]['bloque_de_hora'] = $bloque_hora_reservado;
+
+
+                        // Guardar los cambios en la base de datos
+                        update_field('horarios_rueda_de_negocios', $horarios_rueda_de_negocios, $usuario_id);
+                        update_field('usuarios_agendados', $reservas_del_empresario, $usuario_id);
+
 
                         // Nuevo objeto con el id del empresario y el bloque de horas reservado
                         $nueva_reservacion = array(
