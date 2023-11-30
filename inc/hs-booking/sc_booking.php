@@ -82,6 +82,7 @@ if (!function_exists('hs_booking_func')) {
                     <ul class="hs-body__list">
                         <!-- Aquí va el loop de horas -->
                         <?php foreach ($horarios_rueda_de_negocios as $indice => $horario) : ?>
+                            <?php if(strlen($horario['hora_inicio']) > 0 || strlen($horario['hora_fin']) > 0): ?>
                             <li class="hs-body__list__item">
                                 <span class="hs-body__list__item__time">
                                     <?php echo $horario['hora_inicio']; ?> - <?php echo $horario['hora_fin']; ?>
@@ -99,6 +100,7 @@ if (!function_exists('hs_booking_func')) {
                                     <?php endif; ?>
                                 </span>
                             </li>
+                            <?php endif; ?>
                         <?php endforeach; ?>
                     </ul>
                 <?php endif; ?>
