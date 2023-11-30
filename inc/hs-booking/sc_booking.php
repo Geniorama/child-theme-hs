@@ -138,35 +138,35 @@ if (!function_exists('hs_booking_func')) {
                 if (!$reservaciones_realizadas_actualizado || !in_array($usuario_id, array_column($reservaciones_realizadas_actualizado, 'empresario_id'))) {
                     // Verificar si el usuario ha alcanzado el límite de reservas (por ejemplo, 5)
                     $max_reservas = 5;
-                    if (count($reservaciones_realizadas_actualizado) < $max_reservas) {
-                        // Actualizar el campo 'agendar' a true para el bloque de hora especificado
-                        $horarios_rueda_de_negocios[$bloque_hora_id]['agendar'] = true;
+                    // if (count($reservaciones_realizadas_actualizado) < $max_reservas) {
+                    // Actualizar el campo 'agendar' a true para el bloque de hora especificado
+                    $horarios_rueda_de_negocios[$bloque_hora_id]['agendar'] = true;
 
-                        // Guardar los cambios en la base de datos
-                        update_field('horarios_rueda_de_negocios', $horarios_rueda_de_negocios, $usuario_id);
+                    // Guardar los cambios en la base de datos
+                    update_field('horarios_rueda_de_negocios', $horarios_rueda_de_negocios, $usuario_id);
 
-                        // Guardar el bloque de hora reservado en el perfil del usuario
-                        $bloque_hora_reservado = $horarios_rueda_de_negocios[$bloque_hora_id];
+                    // Guardar el bloque de hora reservado en el perfil del usuario
+                    $bloque_hora_reservado = $horarios_rueda_de_negocios[$bloque_hora_id];
 
-                        // Nuevo objeto con el id del empresario y el bloque de horas reservado
-                        $nueva_reservacion = array(
-                            'empresario_id' => $usuario_id,
-                            'bloque_horas' => $bloque_hora_reservado,
-                        );
+                    // Nuevo objeto con el id del empresario y el bloque de horas reservado
+                    $nueva_reservacion = array(
+                        'empresario_id' => $usuario_id,
+                        'bloque_horas' => $bloque_hora_reservado,
+                    );
 
-                        // Agregar el nuevo objeto al array
-                        $reservaciones_realizadas_actualizado[] = $nueva_reservacion;
+                    // Agregar el nuevo objeto al array
+                    $reservaciones_realizadas_actualizado[] = $nueva_reservacion;
 
-                        // Serializar antes de actualizar el campo
-                        $reservaciones_serializadas = serialize($reservaciones_realizadas_actualizado);
+                    // Serializar antes de actualizar el campo
+                    $reservaciones_serializadas = serialize($reservaciones_realizadas_actualizado);
 
-                        // Actualizar el campo reservaciones_realizadas con los nuevos valores serializados
-                        update_user_meta(get_current_user_id(), 'reservaciones_realizadas', $reservaciones_serializadas);
+                    // Actualizar el campo reservaciones_realizadas con los nuevos valores serializados
+                    update_user_meta(get_current_user_id(), 'reservaciones_realizadas', $reservaciones_serializadas);
 
-                        echo 'Éxito'; // Puedes enviar cualquier respuesta que desees de vuelta al frontend
-                    } else {
-                        echo 'Error: Has alcanzado el límite de reservas permitidas';
-                    }
+                    echo 'Éxito'; // Puedes enviar cualquier respuesta que desees de vuelta al frontend
+                    // } else {
+                    //     echo 'Error: Has alcanzado el límite de reservas permitidas';
+                    // }
                 } else {
                     echo 'Error: Ya tienes una reserva con este empresario';
                 }
