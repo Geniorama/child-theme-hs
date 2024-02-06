@@ -160,7 +160,7 @@ if (!function_exists('hs_booking_func')) {
                 // Verificar si el usuario ya tiene una reserva con el mismo empresario
                 if (!$reservaciones_realizadas_actualizado || !in_array($usuario_id, array_column($reservaciones_realizadas_actualizado, 'empresario_id'))) {
                     // Verificar si el usuario ha alcanzado el límite de reservas (por ejemplo, 5)
-                    $max_reservas = 5;
+                    $max_reservas = get_field('limite_reservas', 1333);
                     if (!$reservaciones_realizadas_actualizado || count($reservaciones_realizadas_actualizado) < $max_reservas) {
                         // Actualizar el campo 'agendar' a true para el bloque de hora especificado
                         $horarios_rueda_de_negocios[$bloque_hora_id]['agendar'] = true;
