@@ -195,12 +195,15 @@ if (!function_exists('hs_booking_func')) {
                         // Actualizar el campo reservaciones_realizadas con los nuevos valores serializados
                         update_user_meta(get_current_user_id(), 'reservaciones_realizadas', $reservaciones_serializadas);
 
-                        echo 'Éxito'; // Puedes enviar cualquier respuesta que desees de vuelta al frontend
+                        // echo 'Éxito';
+                        wp_die(json_encode(array('message' => 'Éxito', 'type' => 'success')));
                     } else {
-                        echo 'Error: Has alcanzado el límite de reservas permitidas';
+                        // echo 'Error: Has alcanzado el límite de reservas permitidas';
+                        wp_die(json_encode(array('message' => 'Error: Has alcanzado el límite de reservas permitidas', 'type' => 'error')));
                     }
                 } else {
-                    echo 'Error: Ya tienes una reserva con este empresario';
+                    // echo "<script>alert('Error: Ya tienes una reserva con este empresario');</script>";
+                    wp_die(json_encode(array('message' => 'Error: Ya tienes una reserva con este empresario', 'type' => 'error')));
                 }
             } else {
                 echo 'Error: Bloque de hora no encontrado';

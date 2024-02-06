@@ -33,13 +33,18 @@ jQuery(function ($) {
                     bloque_hora_id: bloqueHoraId,
                     id_usuario: idUsuario
                 },
-                success: function(res){
-                    console.log(res)
-                    location.reload();
-                },
-    
-                error: function(err){
-                    console.log(err)
+                success: function(response) {
+                    if (response === 'Éxito') {
+                        // Si la respuesta es éxito, puedes hacer lo que necesites
+                        location.reload();
+                    } else {
+                        var data = JSON.parse(response);
+                        if (data.type === 'error') {
+                            alert(data.message);
+                        } else {
+                            // Manejar otros tipos de mensajes si es necesario
+                        }
+                    }
                 }
             });
         })
