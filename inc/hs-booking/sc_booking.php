@@ -194,8 +194,6 @@ if (!function_exists('hs_booking_func')) {
 
                         // Actualizar el campo reservaciones_realizadas con los nuevos valores serializados
                         update_user_meta(get_current_user_id(), 'reservaciones_realizadas', $reservaciones_serializadas);
-
-                        // echo 'Éxito';
                         wp_die(json_encode(array('message' => 'Éxito', 'type' => 'success')));
                     } else {
                         // echo 'Error: Has alcanzado el límite de reservas permitidas';

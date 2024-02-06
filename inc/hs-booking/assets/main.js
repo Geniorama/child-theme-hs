@@ -34,16 +34,12 @@ jQuery(function ($) {
                     id_usuario: idUsuario
                 },
                 success: function(response) {
-                    if (response === 'Éxito') {
-                        // Si la respuesta es éxito, puedes hacer lo que necesites
+                    var data = JSON.parse(response);
+                    if (data.type === 'success') {
+                        window.location.href = 'http://handshakers-v2.local/confirmacion-cita/?id-empresario=' + idUsuario;
+                    } else if (data.type === 'error') {
+                        alert(data.message);
                         location.reload();
-                    } else {
-                        var data = JSON.parse(response);
-                        if (data.type === 'error') {
-                            alert(data.message);
-                        } else {
-                            // Manejar otros tipos de mensajes si es necesario
-                        }
                     }
                 }
             });
