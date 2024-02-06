@@ -35,39 +35,10 @@ if (!function_exists('hs_booking_func')) {
         $nombre = get_field('nombre');
         $apellido = get_field('apellido');
         $nombre_empresa = get_field('nombre_empresa');
+        $cargo = get_field('cargo');
         $horarios_rueda_de_negocios = get_field('horarios_rueda_de_negocios');
         ob_start();
 ?>
-
-        <div class="hs-modal-booking">
-            <div class="hs-modal-booking__card">
-                <hr>
-                <div class="hs-card-heading">
-                    <p>Estás agendando tu cita con</p>
-                    <h3 class="hs-card-heading__name">
-                        <!-- Nombre y apellido de empresario -->
-                        <span class="hs-card-heading__fname">NOMBRE</span>
-                        <span class="hs-card-heading__lname">APELLIDO</span>
-                    </h3>
-                    <p>
-                        <!-- Cargo y empresa de empresario -->
-                        <span>Cargo</span>
-                        /
-                        <span>Empresa</span>
-                    </p>
-                </div>
-                <hr>
-                <div class="hs-card-body">
-                    <p class="hs-info-booking">Para el día <span class="hs-date">5 DE DICIEMBRE DE 2023</span> a las <span class="hs-time">[HORA]</span></p>
-                    <p>No podrás agendar otro horario con este mismo empresario</p>
-                    <p class="hs-text-continue">¿Deseas continuar?</p>
-                    <div class="hs-modal-action-buttons">
-                        <button class="hs-button-booking hs-btn-cancel">CANCELAR</button>
-                        <button class="hs-button-booking hs-btn-continue">CONTINUAR</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <div class="hs-booking-table">
             <div class="hs-booking-title">
@@ -75,17 +46,19 @@ if (!function_exists('hs_booking_func')) {
                 <p>Selecciona la hora de tu agendamiento</p>
             </div>
             <div class="hs-heading">
-                <h5>5 DE DICIEMBRE DE 2023</h5>
+                <h5><?php the_field('fecha_del_evento', 1333) ?></h5>
             </div>
             <div class="hs-body">
                 <?php if ($horarios_rueda_de_negocios) : ?>
                     <ul class="hs-body__list">
                         <!-- Aquí va el loop de horas -->
+
                         <?php foreach ($horarios_rueda_de_negocios as $indice => $horario) : ?>
                             <?php if (strlen($horario['hora_inicio']) > 0 || strlen($horario['hora_fin']) > 0) : ?>
+                                <?php $bloque_hora_reservado = "{$horario['hora_inicio']} - {$horario['hora_fin']}"; ?>
                                 <li class="hs-body__list__item">
                                     <span class="hs-body__list__item__time">
-                                        <?php echo $horario['hora_inicio']; ?> - <?php echo $horario['hora_fin']; ?>
+                                        <?php echo $bloque_hora_reservado; ?>
                                     </span>
 
                                     <span class="hs-body__list__item__action">
@@ -106,6 +79,52 @@ if (!function_exists('hs_booking_func')) {
                 <?php endif; ?>
             </div>
         </div>
+
+
+
+        <div class="hs-modal-booking">
+            <div class="hs-modal-booking__card">
+                <hr>
+                <div class="hs-card-heading">
+                    <p>Estás agendando tu cita con</p>
+                    <h3 class="hs-card-heading__name">
+                        <!-- Nombre y apellido de empresario -->
+                        <span class="hs-card-heading__fname"><?php echo esc_attr($nombre) ?></span>
+                        <span class="hs-card-heading__lname"><?php echo esc_attr($apellido) ?></span>
+                    </h3>
+                    <p>
+                        <!-- Cargo y empresa de empresario -->
+                        <span><?php echo esc_attr($cargo) ?></span>
+                        /
+                        <span><?php echo esc_attr($nombre_empresa) ?></span>
+                    </p>
+                </div>
+                <hr>
+                <div class="hs-card-body">
+                    <p class="hs-info-booking">Para el día <span class="hs-date"><?php the_field('fecha_del_evento', 1333) ?></span> a las <span class="hs-time">[HORA]</span></p>
+                    <p>No podrás agendar otro horario con este mismo empresario</p>
+                    <p class="hs-text-continue">¿Deseas continuar?</p>
+                    <div class="hs-modal-action-buttons">
+                        <button class="hs-button-booking hs-btn-cancel">CANCELAR</button>
+                        <button class="hs-button-booking hs-btn-continue">CONTINUAR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            jQuery(document).ready(function($) {
+                // Evento de clic en el botón Agendar
+                $('.agendar-button').on('click', function() {
+                    // Obtener el bloque de hora
+                    var bloqueHora = $(this).closest('.hs-body__list__item').find('.hs-body__list__item__time').text();
+
+                    // Actualizar el texto en la modal
+                    $('.hs-time').text(bloqueHora);
+                });
+            });
+        </script>
+
 <?php
         return ob_get_clean();
     }

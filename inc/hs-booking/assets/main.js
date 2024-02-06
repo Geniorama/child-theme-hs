@@ -25,7 +25,6 @@ jQuery(function ($) {
         var idUsuario = $(this).attr('data-id-usuario');
 
         $('.hs-btn-continue').click(function(){
-            console.log('hiciste click')
             $.ajax({
                 url: agendarcita.ajaxurl,
                 type: 'post',
