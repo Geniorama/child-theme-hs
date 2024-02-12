@@ -46,7 +46,7 @@ if (!function_exists('hs_booking_func')) {
                 <p>Selecciona la hora de tu agendamiento</p>
             </div>
             <div class="hs-heading">
-                <h5><?php the_field('fecha_del_evento', 1333) ?></h5>
+                <h5><?php the_field('fecha_del_evento', 1369) ?></h5>
             </div>
             <div class="hs-body">
                 <?php if ($horarios_rueda_de_negocios) : ?>
@@ -101,7 +101,7 @@ if (!function_exists('hs_booking_func')) {
                 </div>
                 <hr>
                 <div class="hs-card-body">
-                    <p class="hs-info-booking">Para el día <span class="hs-date"><?php the_field('fecha_del_evento', 1333) ?></span> a las <span class="hs-time">[HORA]</span></p>
+                    <p class="hs-info-booking">Para el día <span class="hs-date"><?php the_field('fecha_del_evento', 1369) ?></span> a las <span class="hs-time">[HORA]</span></p>
                     <p>No podrás agendar otro horario con este mismo empresario</p>
                     <p class="hs-text-continue">¿Deseas continuar?</p>
                     <div class="hs-modal-action-buttons">
@@ -160,7 +160,7 @@ if (!function_exists('hs_booking_func')) {
                 // Verificar si el usuario ya tiene una reserva con el mismo empresario
                 if (!$reservaciones_realizadas_actualizado || !in_array($usuario_id, array_column($reservaciones_realizadas_actualizado, 'empresario_id'))) {
                     // Verificar si el usuario ha alcanzado el límite de reservas (por ejemplo, 5)
-                    $max_reservas = get_field('limite_reservas', 1333);
+                    $max_reservas = get_field('limite_reservas', 1369);
                     if (!$reservaciones_realizadas_actualizado || count($reservaciones_realizadas_actualizado) < $max_reservas) {
                         // Actualizar el campo 'agendar' a true para el bloque de hora especificado
                         $horarios_rueda_de_negocios[$bloque_hora_id]['agendar'] = true;

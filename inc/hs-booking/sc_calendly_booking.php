@@ -33,7 +33,7 @@ if (!function_exists('hs_calendly_booking_func')) {
                 <h5>PROGRAMACIÓN</h5>
             </div>
             <div class="hs-heading">
-                <h5><?php the_field('fecha_del_evento', 1333) ?></h5>
+                <h5><?php the_field('fecha_del_evento', 1369) ?></h5>
             </div>
             <div class="hs-body">
                 <?php if ($reservadas_deserializadas && is_array($reservadas_deserializadas) && count($reservadas_deserializadas) > 0) :
