@@ -194,12 +194,14 @@ if (!function_exists('hs_booking_func')) {
 
                         // Guardar el bloque de hora reservado en el perfil del usuario
                         $bloque_hora_reservado = $horarios_rueda_de_negocios[$bloque_hora_id];
+                        $bloque_hora_reservado = $horarios_rueda_de_negocios[$bloque_hora_id];
+                        $intervalo_tiempo = $bloque_hora_reservado['hora_inicio'] . ' - ' . $bloque_hora_reservado['hora_fin'];
 
                         //Actualizar Datos del usuario en el dashboard del empresario
                         $reservas_del_empresario[$cantidad_de_reservas]['id_usuario'] = get_current_user_id();
                         $reservas_del_empresario[$cantidad_de_reservas]['nombre_usuario'] = $current_user->display_name;
                         $reservas_del_empresario[$cantidad_de_reservas]['correo_usuario'] = $current_user->user_email;
-                        $reservas_del_empresario[$cantidad_de_reservas]['bloque_de_hora'] = $bloque_hora_reservado;
+                        $reservas_del_empresario[$cantidad_de_reservas]['bloque_de_hora'] = $intervalo_tiempo;
 
 
                         // Guardar los cambios en la base de datos
