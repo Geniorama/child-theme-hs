@@ -35,39 +35,10 @@ if (!function_exists('hs_booking_func')) {
         $nombre = get_field('nombre');
         $apellido = get_field('apellido');
         $nombre_empresa = get_field('nombre_empresa');
+        $cargo = get_field('cargo');
         $horarios_rueda_de_negocios = get_field('horarios_rueda_de_negocios');
         ob_start();
 ?>
-
-        <div class="hs-modal-booking">
-            <div class="hs-modal-booking__card">
-                <hr>
-                <div class="hs-card-heading">
-                    <p>Estás agendando tu cita con</p>
-                    <h3 class="hs-card-heading__name">
-                        <!-- Nombre y apellido de empresario -->
-                        <span class="hs-card-heading__fname">NOMBRE</span>
-                        <span class="hs-card-heading__lname">APELLIDO</span>
-                    </h3>
-                    <p>
-                        <!-- Cargo y empresa de empresario -->
-                        <span>Cargo</span>
-                        /
-                        <span>Empresa</span>
-                    </p>
-                </div>
-                <hr>
-                <div class="hs-card-body">
-                    <p class="hs-info-booking">Para el día <span class="hs-date">5 DE DICIEMBRE DE 2023</span> a las <span class="hs-time">[HORA]</span></p>
-                    <p>No podrás agendar otro horario con este mismo empresario</p>
-                    <p class="hs-text-continue">¿Deseas continuar?</p>
-                    <div class="hs-modal-action-buttons">
-                        <button class="hs-button-booking hs-btn-cancel">CANCELAR</button>
-                        <button class="hs-button-booking hs-btn-continue">CONTINUAR</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <div class="hs-booking-table">
             <div class="hs-booking-title">
@@ -75,17 +46,19 @@ if (!function_exists('hs_booking_func')) {
                 <p>Selecciona la hora de tu agendamiento</p>
             </div>
             <div class="hs-heading">
-                <h5>5 DE DICIEMBRE DE 2023</h5>
+                <h5><?php the_field('fecha_del_evento', 1369) ?></h5>
             </div>
             <div class="hs-body">
                 <?php if ($horarios_rueda_de_negocios) : ?>
                     <ul class="hs-body__list">
                         <!-- Aquí va el loop de horas -->
+
                         <?php foreach ($horarios_rueda_de_negocios as $indice => $horario) : ?>
                             <?php if (strlen($horario['hora_inicio']) > 0 || strlen($horario['hora_fin']) > 0) : ?>
+                                <?php $bloque_hora_reservado = "{$horario['hora_inicio']} - {$horario['hora_fin']}"; ?>
                                 <li class="hs-body__list__item">
                                     <span class="hs-body__list__item__time">
-                                        <?php echo $horario['hora_inicio']; ?> - <?php echo $horario['hora_fin']; ?>
+                                        <?php echo $bloque_hora_reservado; ?>
                                     </span>
 
                                     <span class="hs-body__list__item__action">
@@ -106,6 +79,52 @@ if (!function_exists('hs_booking_func')) {
                 <?php endif; ?>
             </div>
         </div>
+
+
+
+        <div class="hs-modal-booking">
+            <div class="hs-modal-booking__card">
+                <hr>
+                <div class="hs-card-heading">
+                    <p>Estás agendando tu cita con</p>
+                    <h3 class="hs-card-heading__name">
+                        <!-- Nombre y apellido de empresario -->
+                        <span class="hs-card-heading__fname"><?php echo esc_attr($nombre) ?></span>
+                        <span class="hs-card-heading__lname"><?php echo esc_attr($apellido) ?></span>
+                    </h3>
+                    <p>
+                        <!-- Cargo y empresa de empresario -->
+                        <span><?php echo esc_attr($cargo) ?></span>
+                        /
+                        <span><?php echo esc_attr($nombre_empresa) ?></span>
+                    </p>
+                </div>
+                <hr>
+                <div class="hs-card-body">
+                    <p class="hs-info-booking">Para el día <span class="hs-date"><?php the_field('fecha_del_evento', 1369) ?></span> a las <span class="hs-time">[HORA]</span></p>
+                    <p>No podrás agendar otro horario con este mismo empresario</p>
+                    <p class="hs-text-continue">¿Deseas continuar?</p>
+                    <div class="hs-modal-action-buttons">
+                        <button class="hs-button-booking hs-btn-cancel">CANCELAR</button>
+                        <button class="hs-button-booking hs-btn-continue">CONTINUAR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            jQuery(document).ready(function($) {
+                // Evento de clic en el botón Agendar
+                $('.agendar-button').on('click', function() {
+                    // Obtener el bloque de hora
+                    var bloqueHora = $(this).closest('.hs-body__list__item').find('.hs-body__list__item__time').text();
+
+                    // Actualizar el texto en la modal
+                    $('.hs-time').text(bloqueHora);
+                });
+            });
+        </script>
+
 <?php
         return ob_get_clean();
     }
@@ -141,7 +160,7 @@ if (!function_exists('hs_booking_func')) {
                 // Verificar si el usuario ya tiene una reserva con el mismo empresario
                 if (!$reservaciones_realizadas_actualizado || !in_array($usuario_id, array_column($reservaciones_realizadas_actualizado, 'empresario_id'))) {
                     // Verificar si el usuario ha alcanzado el límite de reservas (por ejemplo, 5)
-                    $max_reservas = 5;
+                    $max_reservas = get_field('limite_reservas', 1369);
                     if (!$reservaciones_realizadas_actualizado || count($reservaciones_realizadas_actualizado) < $max_reservas) {
                         // Actualizar el campo 'agendar' a true para el bloque de hora especificado
                         $horarios_rueda_de_negocios[$bloque_hora_id]['agendar'] = true;
@@ -175,13 +194,14 @@ if (!function_exists('hs_booking_func')) {
 
                         // Actualizar el campo reservaciones_realizadas con los nuevos valores serializados
                         update_user_meta(get_current_user_id(), 'reservaciones_realizadas', $reservaciones_serializadas);
-
-                        echo 'Éxito'; // Puedes enviar cualquier respuesta que desees de vuelta al frontend
+                        wp_die(json_encode(array('message' => 'Éxito', 'type' => 'success')));
                     } else {
-                        echo 'Error: Has alcanzado el límite de reservas permitidas';
+                        // echo 'Error: Has alcanzado el límite de reservas permitidas';
+                        wp_die(json_encode(array('message' => 'Error: Has alcanzado el límite de reservas permitidas', 'type' => 'error')));
                     }
                 } else {
-                    echo 'Error: Ya tienes una reserva con este empresario';
+                    // echo "<script>alert('Error: Ya tienes una reserva con este empresario');</script>";
+                    wp_die(json_encode(array('message' => 'Error: Ya tienes una reserva con este empresario', 'type' => 'error')));
                 }
             } else {
                 echo 'Error: Bloque de hora no encontrado';

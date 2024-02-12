@@ -25,7 +25,6 @@ jQuery(function ($) {
         var idUsuario = $(this).attr('data-id-usuario');
 
         $('.hs-btn-continue').click(function(){
-            console.log('hiciste click')
             $.ajax({
                 url: agendarcita.ajaxurl,
                 type: 'post',
@@ -34,13 +33,14 @@ jQuery(function ($) {
                     bloque_hora_id: bloqueHoraId,
                     id_usuario: idUsuario
                 },
-                success: function(res){
-                    console.log(res)
-                    location.reload();
-                },
-    
-                error: function(err){
-                    console.log(err)
+                success: function(response) {
+                    var data = JSON.parse(response);
+                    if (data.type === 'success') {
+                        window.location.href = 'https://www.geniorama.site/demo/handshakers/confirmacion-cita/?id-empresario=' + idUsuario;
+                    } else if (data.type === 'error') {
+                        alert(data.message);
+                        location.reload();
+                    }
                 }
             });
         })
