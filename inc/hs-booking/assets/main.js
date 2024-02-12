@@ -18,7 +18,7 @@ jQuery(function ($) {
 
 
     //Abre el modal con los botones de la lista
-    $(".hs-body__list .hs-button-booking").click(function(e){
+    $(".hs-body__list .agendar-button").click(function(e){
         e.stopPropagation()
         $(".hs-modal-booking").show().css('opacity', '1');
         var bloqueHoraId = $(this).attr('data-bloque-hora-id');

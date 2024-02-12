@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * SHORTCODE PARA MOSTRAR CALENDARIO
+ * [hs_calendly_booking]
+ * Página Mis Handshakes
+ */
+
+
 if (!function_exists('hs_calendly_booking_func')) {
 
     add_shortcode('hs_calendly_booking', 'hs_calendly_booking_func');

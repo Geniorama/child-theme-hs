@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * SHORTCODE PARA MOSTRAR AGENDA PARA RESERVAR
+ * [hs_booking]
+ * Página single empresarios
+ */
 if (!function_exists('hs_booking_func')) {
 
     add_shortcode('hs_booking', 'hs_booking_func');
@@ -29,14 +34,21 @@ if (!function_exists('hs_booking_func')) {
 
 
         global $post;
-        $usuario = get_the_ID();
-        $post = get_post($usuario);
+        $empresario = get_the_ID();
+        $post = get_post($empresario);
         setup_postdata($post);
         $nombre = get_field('nombre');
         $apellido = get_field('apellido');
         $nombre_empresa = get_field('nombre_empresa');
         $cargo = get_field('cargo');
         $horarios_rueda_de_negocios = get_field('horarios_rueda_de_negocios');
+        $current_user = wp_get_current_user();
+
+        // Obtener los bloques de horas ya reservados por el usuario
+        $reservaciones_realizadas_actualizado = get_user_meta($current_user->ID, 'reservaciones_realizadas', true);
+
+        // Deserializar para obtener el array
+        $reservaciones_realizadas_actualizado = unserialize($reservaciones_realizadas_actualizado);
         ob_start();
 ?>
 
@@ -67,10 +79,14 @@ if (!function_exists('hs_booking_func')) {
                                                 NO DISPONIBLE
                                             </button>
                                         <?php else : ?>
-                                            <button class="hs-button-booking agendar-button" data-bloque-hora-id="<?php echo $indice ?>" data-id-usuario="<?php echo esc_attr($usuario) ?>">
-                                                Agendar <i>Hand Shake</i>
-                                            </button>
-                                        <?php endif; ?>
+                                            <?php if (bloque_hora_disponible_usuario($horario['hora_inicio'], $reservaciones_realizadas_actualizado)) : ?>
+                                                <button class="hs-button-booking" onclick="alert('Ya tienes una reserva en este mismo horario con otro empresario')">
+                                                <?php else : ?>
+                                                    <button class="hs-button-booking agendar-button" data-bloque-hora-id="<?php echo $indice ?>" data-id-usuario="<?php echo esc_attr($empresario) ?>">
+                                                    <?php endif; ?>
+                                                    Agendar <i>Hand Shake</i>
+                                                    </button>
+                                                <?php endif; ?>
                                     </span>
                                 </li>
                             <?php endif; ?>
@@ -129,6 +145,17 @@ if (!function_exists('hs_booking_func')) {
         return ob_get_clean();
     }
 
+    /**
+     * Valida si el usuario no tiene ninguna agenda en el bloque de hora que desea reservar
+     */
+    function bloque_hora_disponible_usuario($bloque_hora_inicio_agenda, $reservaciones_realizadas_actualizado)
+    {
+        foreach ($reservaciones_realizadas_actualizado as $reserva_realizada) {
+            if ($bloque_hora_inicio_agenda === $reserva_realizada['bloque_horas']['hora_inicio']) return true;
+        }
+        return false;
+    }
+
 
     /**
      * Nueva función para manejar la reservación del bloque de hora
@@ -152,7 +179,7 @@ if (!function_exists('hs_booking_func')) {
             // Verificar que el bloque de hora existe
             if (isset($horarios_rueda_de_negocios[$bloque_hora_id])) {
                 // Obtener el valor actualizado de reservaciones_realizadas_empresarios
-                $reservaciones_realizadas_actualizado = get_user_meta(get_current_user_id(), 'reservaciones_realizadas', true);
+                $reservaciones_realizadas_actualizado = get_user_meta($current_user->ID, 'reservaciones_realizadas', true);
 
                 // Deserializar para obtener el array
                 $reservaciones_realizadas_actualizado = unserialize($reservaciones_realizadas_actualizado);
