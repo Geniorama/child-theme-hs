@@ -40,6 +40,7 @@ require "inc/hs-booking/sc_booking.php";
 require "inc/hs-booking/sc_calendly_booking.php";
 require "inc/helpers/sc_show_name.php";
 require "inc/helpers/sc_show_photo.php";
+require "inc/shortcodes/loop-empresarios/hs_empresarios.php";
 
 function enqueue_slick_assets()
 {
