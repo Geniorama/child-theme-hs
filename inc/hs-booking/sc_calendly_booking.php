@@ -13,21 +13,13 @@ if (!function_exists('hs_calendly_booking_func')) {
 
     function hs_calendly_booking_func($atts)
     {
-        $atts = shortcode_atts(array(
-            'id-suscriptor' => ''
-        ), $atts, 'hs_calendly_booking');
-
         // Validamos si el usuario está logueado
         if (!is_user_logged_in()) {
             return false;
         }
 
-
         // Carga los estilos CSS
         wp_enqueue_style('table-hs', get_stylesheet_directory_uri() . '/inc/hs-booking/assets/style.css');
-
-        //Carga JS
-        wp_enqueue_script('booking-js', get_stylesheet_directory_uri() . '/inc/hs-booking/assets/main.js', array('jquery'), '1.0', true);
 
         $reservadas_serializadas = get_user_meta(get_current_user_id(), 'reservaciones_realizadas', true);
 
@@ -44,13 +36,6 @@ if (!function_exists('hs_calendly_booking_func')) {
             </div>
             <div class="hs-body">
                 <?php if ($reservadas_deserializadas && is_array($reservadas_deserializadas) && count($reservadas_deserializadas) > 0) :
-
-                    // Función de comparación para ordenar los bloques de horas por hora de inicio
-                    function comparar_horas($a, $b)
-                    {
-                        return strtotime($a['bloque_horas']['hora_inicio']) - strtotime($b['bloque_horas']['hora_inicio']);
-                    }
-
                     // Ordenar el array de reservaciones por hora de inicio
                     usort($reservadas_deserializadas, 'comparar_horas');
                 ?>
@@ -91,4 +76,11 @@ if (!function_exists('hs_calendly_booking_func')) {
 <?php
         return ob_get_clean();
     }
+}
+
+
+// Función de comparación para ordenar los bloques de horas por hora de inicio
+function comparar_horas($a, $b)
+{
+    return strtotime($a['bloque_horas']['hora_inicio']) - strtotime($b['bloque_horas']['hora_inicio']);
 }
