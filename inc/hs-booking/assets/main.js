@@ -47,6 +47,31 @@ jQuery(function ($) {
     })
 
     
-
+    $(".hs-eliminar-reserva").click(function(e) {
+        e.stopPropagation();
+        const reserva = $(this).attr('data-reserva');
+        const reservasRealizadas = $(this).attr('data-reservas-realizadas');
+        console.log('valor de reserva--->', reserva);
+        console.log('valor de todas las reservas--->', reservasRealizadas);
+        $.ajax({
+            url: eliminarcita.ajaxurl,
+            type: 'post',
+            data: {
+                action: 'eliminar_cita',
+                reserva: reserva,
+                reservas_realizadas: reservasRealizadas
+            },
+            success: function(response) {
+                var data = JSON.parse(response);
+                if (data.type === 'success') {
+                    alert(data.message);
+                    location.reload();
+                } else if (data.type === 'error') {
+                    alert(data.message);
+                    location.reload();
+                }
+            }
+        });
+    })
     
 });
