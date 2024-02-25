@@ -51,8 +51,6 @@ jQuery(function ($) {
         e.stopPropagation();
         const reserva = $(this).attr('data-reserva');
         const reservasRealizadas = $(this).attr('data-reservas-realizadas');
-        console.log('valor de reserva--->', reserva);
-        console.log('valor de todas las reservas--->', reservasRealizadas);
         $.ajax({
             url: eliminarcita.ajaxurl,
             type: 'post',

@@ -45,13 +45,10 @@ if (!function_exists('hs_calendly_booking_func')) {
       <div class="hs-body">
         <?php if ($reservadas_deserializadas && is_array($reservadas_deserializadas) && count($reservadas_deserializadas) > 0) :
           // Ordenar el array de reservaciones por hora de inicio
-          usort($reservadas_deserializadas, 'comparar_horas');
+          usort($reservadas_deserializadas, 'ordenar_bloque_horas');
         ?>
           <ul class="hs-body__list">
             <!-- Aquí va el loop de horas -->
-            <pre>
-                        <?php var_dump($reservadas_deserializadas) ?>
-                        </pre>
             <?php // Imprimir los elementos del array ordenados
             foreach ($reservadas_deserializadas as $reservacion) :
               $empresario_id = $reservacion['empresario_id'];
@@ -66,9 +63,9 @@ if (!function_exists('hs_calendly_booking_func')) {
             ?>
               <li class="hs-body__list__item">
                 <span class="hs-body__list__item__name">
-                  <button class="hs-button-booking hs-eliminar-reserva" data-reserva="<?php echo esc_attr(json_encode($reservacion)); ?>" data-reservas-realizadas="<?php echo esc_attr(json_encode($reservadas_deserializadas)) ?>">
-                    Eliminar Cita
-                  </button>
+                  <div class="elementor-icon hs-eliminar-reserva" data-reserva="<?php echo esc_attr(json_encode($reservacion)); ?>" data-reservas-realizadas="<?php echo esc_attr(json_encode($reservadas_deserializadas)) ?>">
+                    <i aria-hidden="true" class="far fa-trash-alt"></i>
+                  </div>
                   <?php echo esc_html($nombre_empresario); ?>
                 </span>
                 <span class="hs-body__list__item__time">
@@ -94,13 +91,20 @@ if (!function_exists('hs_calendly_booking_func')) {
 
 
 // Función de comparación para ordenar los bloques de horas por hora de inicio
-function comparar_horas($a, $b)
+function ordenar_bloque_horas($a, $b)
 {
   return strtotime($a['bloque_horas']['hora_inicio']) - strtotime($b['bloque_horas']['hora_inicio']);
 }
 
 
-// Función para eliminar cita agendada con un empresario
+/**
+ * Función para eliminar cita agendada con un empresario
+ * 
+ * Esta funcón elimina las citas desde el lado del usuario y 
+ * desde el lado del empresario. Para ello se necesitan los 
+ * datos de todas las reservas del usuario, y la reserva que desea elimnar.
+ * Además, se obtiene el id del usuario actual
+ */
 function eliminar_cita()
 {
   if (isset($_POST['reserva'], $_POST['reservas_realizadas'])) {
@@ -108,19 +112,76 @@ function eliminar_cita()
     $reservadas_deserializadas = json_decode(stripslashes($_POST['reservas_realizadas']), true);
     $current_user = get_current_user_id();
 
-    // Extraer el empresario_id
-    $empresario_id = $reservacion['empresario_id'];
+    eliminar_cita_empresario($reservacion, $current_user);
 
-    // Filtrar los elementos del primer array que no coincidan con el empresario_id
-    $reservadas_filtradas = array_filter($reservadas_deserializadas, function ($item) use ($empresario_id) {
-      return $item['empresario_id'] !== $empresario_id;
-    });
+    eliminar_cita_usuario($reservacion, $reservadas_deserializadas, $current_user);
 
-    // Ahora $reservadas_filtradas contiene los elementos del primer array que no coinciden con el empresario_id
-    $reservadas_filtradas_serializadas = serialize($reservadas_filtradas);
-    update_user_meta($current_user, 'reservaciones_realizadas', $reservadas_filtradas_serializadas);
     wp_die(json_encode(array('message' => 'Cita eliminada con éxito', 'type' => 'success')));
   }
 }
 add_action('wp_ajax_eliminar_cita', 'eliminar_cita');
 add_action('wp_ajax_nopriv_eliminar_cita', 'eliminar_cita');
+
+
+function eliminar_cita_usuario($reservacion, $reservadas_deserializadas, $current_user)
+{
+  // Extraer el empresario_id
+  $empresario_id = $reservacion['empresario_id'];
+
+  // Filtrar los elementos del primer array que no coincidan con el empresario_id
+  $reservadas_filtradas = array_filter($reservadas_deserializadas, function ($item) use ($empresario_id) {
+    return $item['empresario_id'] !== $empresario_id;
+  });
+
+  // Ahora $reservadas_filtradas contiene los elementos del primer array que no coinciden con el empresario_id
+  $reservadas_filtradas_serializadas = serialize($reservadas_filtradas);
+  update_user_meta(
+    $current_user,
+    'reservaciones_realizadas',
+    $reservadas_filtradas_serializadas
+  );
+  return;
+}
+
+function eliminar_cita_empresario($reservacion, $current_user)
+{
+  $empresario_id = $reservacion['empresario_id'];
+  $hora_inicio = $reservacion['bloque_horas']['hora_inicio'];
+  $hora_fin = $reservacion['bloque_horas']['hora_fin'];
+
+  $horarios_rueda_de_negocios = get_field('horarios_rueda_de_negocios', $empresario_id); // Obteniendo los horarios del empresario
+
+  // Obtener la posición en el array, del bloque de hora que coincida con el bloque de hora que el usuario desea eliminar
+  $position = encontrar_index_bloque_horas($horarios_rueda_de_negocios, $hora_inicio, $hora_fin);
+
+  $position !== false ?
+    $horarios_rueda_de_negocios[$position]['agendar'] = false :
+    wp_die(json_encode(array('message' => 'No es posible eliminar esta cita', 'type' => 'error')));
+
+  $lista_usuarios_agendados = get_field('usuarios_agendados', $empresario_id);
+
+  $usuarios_filtrados = array_filter($lista_usuarios_agendados, function ($item) use ($current_user) {
+    return $item['id_usuario'] != $current_user;
+  });
+
+  update_field('horarios_rueda_de_negocios', $horarios_rueda_de_negocios, $empresario_id);
+  update_field('usuarios_agendados', $usuarios_filtrados, $empresario_id);
+  return;
+}
+
+function encontrar_index_bloque_horas($horarios_rueda_de_negocios, $hora_inicio, $hora_fin)
+{
+  foreach ($horarios_rueda_de_negocios as $index => $valor) {
+    if (comparar_bloque_horas($valor, $hora_inicio, $hora_fin)) return $index;
+  }
+  return false;
+}
+
+function comparar_bloque_horas($valor, $hora_inicio, $hora_fin)
+{
+  return (
+    $valor['hora_inicio'] === $hora_inicio &&
+    $valor['hora_fin'] === $hora_fin &&
+    $valor['agendar']
+  );
+}

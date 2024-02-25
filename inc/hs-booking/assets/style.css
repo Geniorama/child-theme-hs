@@ -171,6 +171,16 @@
     margin-top: 20px;
 }
 
+.hs-eliminar-reserva {
+    font-size: 1.2rem;
+    margin-right: 1rem;
+    transition: color .3s ease-in;
+}
+
+.hs-eliminar-reserva:hover {
+    color: var( --e-global-color-primary );
+}
+
 @media screen and (max-width: 600px){
     .hs-body__list__item{
         flex-direction: column;

@@ -192,7 +192,6 @@ if (!function_exists('hs_booking_func')) {
 
             // Guardar el bloque de hora reservado en el perfil del usuario
             $bloque_hora_reservado = $horarios_rueda_de_negocios[$bloque_hora_id];
-            $bloque_hora_reservado = $horarios_rueda_de_negocios[$bloque_hora_id];
             $intervalo_tiempo = $bloque_hora_reservado['hora_inicio'] . ' - ' . $bloque_hora_reservado['hora_fin'];
 
             //Actualizar Datos del usuario en el dashboard del empresario
