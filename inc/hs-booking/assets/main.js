@@ -23,8 +23,9 @@ jQuery(function ($) {
         $(".hs-modal-booking").show().css('opacity', '1');
         var bloqueHoraId = $(this).attr('data-bloque-hora-id');
         var idUsuario = $(this).attr('data-id-usuario');
-
-        $('.hs-btn-continue').click(function(){
+        
+        $('.hs-btn-continue').off('click').click(function(e){
+            e.stopPropagation()
             $.ajax({
                 url: agendarcita.ajaxurl,
                 type: 'post',

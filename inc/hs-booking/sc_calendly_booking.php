@@ -4,6 +4,8 @@
  * SHORTCODE PARA MOSTRAR CALENDARIO
  * [hs_calendly_booking]
  * Página Mis Handshakes
+ * Todo el contenido de este archivo es necesario
+ * para el correcto funcionamiento del shortcode
  */
 
 
