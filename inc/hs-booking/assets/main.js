@@ -52,13 +52,16 @@ jQuery(function ($) {
         e.stopPropagation();
         const reserva = $(this).attr('data-reserva');
         const reservasRealizadas = $(this).attr('data-reservas-realizadas');
+        const currentUser = $(this).data('user');
+        console.log('current_user---->', currentUser);
         $.ajax({
             url: eliminarcita.ajaxurl,
             type: 'post',
             data: {
                 action: 'eliminar_cita',
                 reserva: reserva,
-                reservas_realizadas: reservasRealizadas
+                reservas_realizadas: reservasRealizadas,
+                current_user: currentUser
             },
             success: function(response) {
                 var data = JSON.parse(response);

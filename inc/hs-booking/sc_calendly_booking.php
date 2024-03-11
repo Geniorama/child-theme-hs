@@ -20,7 +20,7 @@ if (!function_exists('hs_calendly_booking_func')) {
       return false;
     }
 
-    $current_user = get_current_user_id();
+    $current_user = is_author() ? get_the_author_meta('ID') : get_current_user_id();
 
     // Carga los estilos CSS
     wp_enqueue_style('table-hs', get_stylesheet_directory_uri() . '/inc/hs-booking/assets/style.css');
@@ -65,8 +65,8 @@ if (!function_exists('hs_calendly_booking_func')) {
             ?>
               <li class="hs-body__list__item">
                 <span class="hs-body__list__item__name">
-                  <div class="elementor-icon hs-eliminar-reserva" data-reserva="<?php echo esc_attr(json_encode($reservacion)); ?>" data-reservas-realizadas="<?php echo esc_attr(json_encode($reservadas_deserializadas)) ?>">
-                    <i aria-hidden="true" class="far fa-trash-alt"></i>
+                  <div class="elementor-icon hs-eliminar-reserva" data-reserva="<?php echo esc_attr(json_encode($reservacion)); ?>" data-reservas-realizadas="<?php echo esc_attr(json_encode($reservadas_deserializadas)) ?>" data-user="<?php echo esc_attr($current_user) ?>">
+                    <i aria-hidden="true" class="fas fa-trash-alt"></i>
                   </div>
                   <?php echo esc_html($nombre_empresario); ?>
                 </span>
@@ -112,8 +112,7 @@ function eliminar_cita()
   if (isset($_POST['reserva'], $_POST['reservas_realizadas'])) {
     $reservacion = json_decode(stripslashes($_POST['reserva']), true);
     $reservadas_deserializadas = json_decode(stripslashes($_POST['reservas_realizadas']), true);
-    $current_user = get_current_user_id();
-
+    $current_user = sanitize_text_field($_POST['current_user']);
     eliminar_cita_empresario($reservacion, $current_user);
 
     eliminar_cita_usuario($reservacion, $reservadas_deserializadas, $current_user);
