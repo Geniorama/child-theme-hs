@@ -40,19 +40,7 @@ require "inc/hs-booking/sc_booking.php";
 require "inc/hs-booking/sc_calendly_booking.php";
 require "inc/helpers/sc_show_name.php";
 require "inc/helpers/sc_show_photo.php";
-
-/**
- * SHORTCODE PARA MOSTRAR AGENDA PARA RESERVAR
- * [hs_booking]
- * Página single empresarios
- */
-
-
- /**
- * SHORTCODE PARA MOSTRAR CALENDARIO
- * [hs_calendly_booking]
- * Página Mis Handshakes
- */
+require "inc/shortcodes/loop-empresarios/hs_empresarios.php";
 
 function enqueue_slick_assets()
 {
@@ -64,4 +52,3 @@ function enqueue_slick_assets()
 	wp_enqueue_script('slick-js', 'https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js', array('jquery'), '1.8.1', true);
 }
 add_action('wp_enqueue_scripts', 'enqueue_slick_assets');
-

@@ -18,14 +18,14 @@ jQuery(function ($) {
 
 
     //Abre el modal con los botones de la lista
-    $(".hs-body__list .hs-button-booking").click(function(e){
+    $(".hs-body__list .agendar-button").click(function(e){
         e.stopPropagation()
         $(".hs-modal-booking").show().css('opacity', '1');
         var bloqueHoraId = $(this).attr('data-bloque-hora-id');
         var idUsuario = $(this).attr('data-id-usuario');
-
-        $('.hs-btn-continue').click(function(){
-            console.log('hiciste click')
+        
+        $('.hs-btn-continue').off('click').click(function(e){
+            e.stopPropagation()
             $.ajax({
                 url: agendarcita.ajaxurl,
                 type: 'post',
@@ -34,19 +34,43 @@ jQuery(function ($) {
                     bloque_hora_id: bloqueHoraId,
                     id_usuario: idUsuario
                 },
-                success: function(res){
-                    console.log(res)
-                    location.reload();
-                },
-    
-                error: function(err){
-                    console.log(err)
+                success: function(response) {
+                    var data = JSON.parse(response);
+                    if (data.type === 'success') {
+                        window.location.href = 'https://handshakers.copu.media/confirmacion-cita/?id-empresario=' + idUsuario;
+                    } else if (data.type === 'error') {
+                        alert(data.message);
+                        location.reload();
+                    }
                 }
             });
         })
     })
 
     
-
+    $(".hs-eliminar-reserva").click(function(e) {
+        e.stopPropagation();
+        const reserva = $(this).attr('data-reserva');
+        const reservasRealizadas = $(this).attr('data-reservas-realizadas');
+        $.ajax({
+            url: eliminarcita.ajaxurl,
+            type: 'post',
+            data: {
+                action: 'eliminar_cita',
+                reserva: reserva,
+                reservas_realizadas: reservasRealizadas
+            },
+            success: function(response) {
+                var data = JSON.parse(response);
+                if (data.type === 'success') {
+                    alert(data.message);
+                    location.reload();
+                } else if (data.type === 'error') {
+                    alert(data.message);
+                    location.reload();
+                }
+            }
+        });
+    })
     
 });

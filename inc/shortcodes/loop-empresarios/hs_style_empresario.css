@@ -1,0 +1,31 @@
+.hs-grid-empresarios {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px 30px;
+}
+
+.hs-grid-empresarios .empresario-descripcion {
+  color: var(--e-global-color-d64f881);
+  font-family: "Helvetica Neue Light", Sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: -0.65px;
+  text-align: center;
+}
+
+.box-empresa .empresario-descripcion {
+  text-transform: uppercase;
+  margin-bottom: 0;
+}
+
+@media screen and (max-width: 1024px) and (min-width: 769px) {
+  .hs-grid-empresarios {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .hs-grid-empresarios {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
