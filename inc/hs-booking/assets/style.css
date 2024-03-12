@@ -175,6 +175,9 @@
     font-size: 1.2rem;
     margin-right: 1rem;
     transition: color .3s ease-in;
+    border: 0;
+    background: transparent;
+    padding: 5px;
 }
 
 .hs-eliminar-reserva:hover {

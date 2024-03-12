@@ -51,6 +51,7 @@ jQuery(function ($) {
     
     $(".hs-eliminar-reserva").click(function(e) {
         e.stopPropagation();
+        $(".hs-eliminar-reserva").prop("disabled", true); // Deshabilita el botón para evitar que presionen clic varias veces seguidas
         const reserva = $(this).attr('data-reserva');
         const reservasRealizadas = $(this).attr('data-reservas-realizadas');
         const currentUser = $(this).data('user');

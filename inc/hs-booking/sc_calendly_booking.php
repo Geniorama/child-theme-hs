@@ -65,9 +65,9 @@ if (!function_exists('hs_calendly_booking_func')) {
             ?>
               <li class="hs-body__list__item">
                 <span class="hs-body__list__item__name">
-                  <div class="elementor-icon hs-eliminar-reserva" data-reserva="<?php echo esc_attr(json_encode($reservacion)); ?>" data-reservas-realizadas="<?php echo esc_attr(json_encode($reservadas_deserializadas)) ?>" data-user="<?php echo esc_attr($current_user) ?>">
+                  <button class="elementor-icon hs-eliminar-reserva" data-reserva="<?php echo esc_attr(json_encode($reservacion)); ?>" data-reservas-realizadas="<?php echo esc_attr(json_encode($reservadas_deserializadas)) ?>" data-user="<?php echo esc_attr($current_user) ?>">
                     <i aria-hidden="true" class="fas fa-trash-alt"></i>
-                  </div>
+                  </button>
                   <?php echo esc_html($nombre_empresario); ?>
                 </span>
                 <span class="hs-body__list__item__time">
