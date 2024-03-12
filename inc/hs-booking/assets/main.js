@@ -26,6 +26,7 @@ jQuery(function ($) {
         
         $('.hs-btn-continue').off('click').click(function(e){
             e.stopPropagation()
+            $(this).prop("disabled", true); // Deshabilita el botón para evitar que presionen clic varias veces seguidas
             $.ajax({
                 url: agendarcita.ajaxurl,
                 type: 'post',
