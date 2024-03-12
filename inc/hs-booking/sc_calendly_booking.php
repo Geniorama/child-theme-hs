@@ -113,6 +113,7 @@ function eliminar_cita()
     $reservacion = json_decode(stripslashes($_POST['reserva']), true);
     $reservadas_deserializadas = json_decode(stripslashes($_POST['reservas_realizadas']), true);
     $current_user = sanitize_text_field($_POST['current_user']);
+
     eliminar_cita_empresario($reservacion, $current_user);
 
     eliminar_cita_usuario($reservacion, $reservadas_deserializadas, $current_user);

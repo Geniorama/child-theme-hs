@@ -53,7 +53,6 @@ jQuery(function ($) {
         const reserva = $(this).attr('data-reserva');
         const reservasRealizadas = $(this).attr('data-reservas-realizadas');
         const currentUser = $(this).data('user');
-        console.log('current_user---->', currentUser);
         $.ajax({
             url: eliminarcita.ajaxurl,
             type: 'post',
