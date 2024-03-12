@@ -175,7 +175,11 @@ if (!function_exists('hs_booking_func')) {
       $cantidad_de_reservas = count($reservas_del_empresario);
 
       // Verificar que el bloque de hora existe
-      if (isset($horarios_rueda_de_negocios[$bloque_hora_id])) {
+      if (isset($horarios_rueda_de_negocios[$bloque_hora_id])) { // Valida que el bloque de hora exista
+
+        // Validar que el bloque de hora siga estando disponible
+        if ($horarios_rueda_de_negocios[$bloque_hora_id]['agendar']) wp_die(json_encode(array('message' => 'Error: Lo sentimos, el horario elegido ya no está disponible. Por favor, elige otro.', 'type' => 'error')));
+
         // Obtener el valor actualizado de reservaciones_realizadas_empresarios
         $reservaciones_realizadas_actualizado = get_user_meta($current_user->ID, 'reservaciones_realizadas', true);
 
@@ -230,10 +234,10 @@ if (!function_exists('hs_booking_func')) {
           wp_die(json_encode(array('message' => 'Error: Ya tienes una reserva con este empresario', 'type' => 'error')));
         }
       } else {
-        echo 'Error: Bloque de hora no encontrado';
+        wp_die(json_encode(array('message' => 'Error: Bloque de hora no encontrado', 'type' => 'error')));
       }
     } else {
-      echo 'Error: Datos de bloque de hora no recibidos';
+      wp_die(json_encode(array('message' => 'Error: Datos de bloque de hora no recibidos', 'type' => 'error')));
     }
     die();
   }

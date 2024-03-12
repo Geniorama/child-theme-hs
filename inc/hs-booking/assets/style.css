@@ -181,6 +181,7 @@
 }
 
 .hs-eliminar-reserva:hover {
+    background: transparent;
     color: var( --e-global-color-primary );
 }
 
