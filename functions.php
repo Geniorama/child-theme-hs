@@ -42,6 +42,7 @@ require "inc/helpers/sc_show_name.php";
 require "inc/helpers/sc_show_photo.php";
 require "inc/shortcodes/loop-empresarios/hs_empresarios.php";
 require "inc/shortcodes/users-info/hs_user_info.php";
+require "inc/hs-user-register/hs_user_register.php";
 
 function enqueue_slick_assets()
 {
