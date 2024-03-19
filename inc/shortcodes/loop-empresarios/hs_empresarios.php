@@ -14,6 +14,8 @@ function hs_listar_empresarios()
   $args = array(
     'post_type'     => 'empresarios',
     'posts_per_page'  => -1,
+    'orderby' => 'title',
+    'order' => 'ASC',
   );
 
   $query = new WP_Query($args);
