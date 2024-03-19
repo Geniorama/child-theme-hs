@@ -13,3 +13,54 @@ Tags: flexible-header, custom-colors, custom-menu, custom-logo, editor-style, fe
 */
 
 /* Add your custom styles here */
+
+
+#update_profile .rcp_form legend {
+  display: none;
+}
+
+#update_profile .rcp_form label {
+  font-family: "Helvetica Neue Light", Sans-serif;
+  color: white;
+  margin-bottom: 0.5rem;
+  margin-top: 1rem;
+  font-size: 1.2rem;
+}
+
+#update_profile .rcp_form .rcp-input, #update_profile .rcp_form select {
+  font-family: "Helvetica Neue Light", Sans-serif;
+  background-color: transparent;
+  color: white;
+  padding: 0.5rem 0.7rem;
+  font-size: 1.2rem;
+}
+
+#update_profile .rcp_form select option {
+  font-family: "Helvetica Neue Light", Sans-serif;
+  background-color: black;
+  color: white;
+}
+
+#update_profile .rcp_form select option:hover {
+  background-color: white;
+  color: black;
+}
+
+#rcp_profile_submit_wrap #rcp_profile_editor_submit {
+  background: var(--e-global-color-primary);
+  border-radius: 0px;
+  margin-top: 1.5rem;
+  border-color: var(--e-global-color-primary);
+  text-transform: uppercase;
+  color: black;
+  font-family: "Helvetica Neue Bold", Sans-serif;
+  letter-spacing: -0.6px;
+  font-size: 12px;
+  min-width: 200px;
+  opacity: 1;
+  transition: all .3s ease-in;
+}
+
+#rcp_profile_submit_wrap #rcp_profile_editor_submit:hover {
+  opacity: 0.6;
+}

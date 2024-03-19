@@ -18,6 +18,12 @@
   margin-bottom: 0;
 }
 
+.hs-grid-empresarios .empresario img {
+  height: 400px;
+  object-fit: cover;
+  width: 100%;
+}
+
 @media screen and (max-width: 1024px) and (min-width: 769px) {
   .hs-grid-empresarios {
     grid-template-columns: repeat(3, 1fr);
