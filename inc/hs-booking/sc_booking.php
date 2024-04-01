@@ -18,8 +18,10 @@ if (!function_exists('hs_booking_func')) {
     // Validamos si el usuario está logueado
     if (!is_user_logged_in()) {
       return false;
+    } else if (!current_user_can('administrator') && !current_user_can('subscriber')) {
+      // Validamos si el usuario tiene rol de admin o suscriber
+      return false;
     }
-
 
     // Carga los estilos CSS
     wp_enqueue_style('table-hs', get_stylesheet_directory_uri() . '/inc/hs-booking/assets/style.css');
