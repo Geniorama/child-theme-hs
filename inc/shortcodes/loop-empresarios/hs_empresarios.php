@@ -65,14 +65,15 @@ function hs_template_empresario($disponibilidad_empresario)
       <h3 class='empresario-descripcion'>$cargo</h3>		
     </div>";
 
-  $template = $disponibilidad_empresario ?
-    do_shortcode('[INSERT_ELEMENTOR id="1479"]') :
-    do_shortcode('[INSERT_ELEMENTOR id="1481"]');
+  // $template = $disponibilidad_empresario ?
+  //   do_shortcode('[INSERT_ELEMENTOR id="1479"]') :
+  //   do_shortcode('[INSERT_ELEMENTOR id="1481"]');
 
   $html = '';
   $html .= '<div class="empresario">';
   $html .= "<div class='container-image'><img src=$perfil_empresario alt=$nombre_empresario></div>";
-  $html .= $template;
+  // $html .= $template;
+  $html .= do_shortcode('[INSERT_ELEMENTOR id="1479"]');
   $html .= $html_empresa;
   $html .= $html_cargo;
   $html .= '</div>';
