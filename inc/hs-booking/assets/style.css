@@ -9,6 +9,7 @@
 .hs-heading h5{
     font-size: 35px;
     margin: 0;
+    text-transform: uppercase;
 }
 
 .hs-booking-table{
@@ -168,6 +169,20 @@
     letter-spacing: -1.15px;
     text-transform: uppercase;
     margin-top: 20px;
+}
+
+.hs-eliminar-reserva {
+    font-size: 1.2rem;
+    margin-right: 1rem;
+    transition: color .3s ease-in;
+    border: 0;
+    background: transparent;
+    padding: 5px;
+}
+
+.hs-eliminar-reserva:hover {
+    background: transparent;
+    color: var( --e-global-color-primary );
 }
 
 @media screen and (max-width: 600px){
