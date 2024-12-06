@@ -23,6 +23,7 @@ if (!function_exists('hs_booking_func')) {
       return false;
     }
 
+
     // Carga los estilos CSS
     wp_enqueue_style('table-hs', get_stylesheet_directory_uri() . '/inc/hs-booking/assets/style.css');
 
